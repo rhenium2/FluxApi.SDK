@@ -14,10 +14,10 @@ public class FluxApiClient : IDisposable
     {
         BaseUri = "https://api.runonflux.io";
         HttpClient = new HttpClient();
-        HttpClient.Timeout = TimeSpan.FromSeconds(30);
-        HttpClient.DefaultRequestHeaders.Add("User-Agent", "HeliumApi-SDK");
+        HttpClient.Timeout = TimeSpan.FromSeconds(15);
+        HttpClient.DefaultRequestHeaders.Add("User-Agent", "FluxApi-SDK");
     }
-    
+
     public FluxApiClient(string baseUri) : this()
     {
         BaseUri = baseUri;
@@ -29,7 +29,7 @@ public class FluxApiClient : IDisposable
             .Handle<HttpRequestException>()
             .Or<TaskCanceledException>()
             .OrResult<HttpResponseMessage>(TransientHttpFailures)
-            .WaitAndRetryAsync(5, retryAttempt => TimeSpan.FromSeconds(3 * retryAttempt))
+            .WaitAndRetryAsync(2, retryAttempt => TimeSpan.FromSeconds(3 * retryAttempt))
             .ExecuteAsync(func);
     }
 
